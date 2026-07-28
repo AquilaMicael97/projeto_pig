@@ -1,0 +1,7 @@
+classe,train,valid,test,total
+piglet,3528,641,472,4641
+sow-sit,131,15,13,159
+sow-sleep,86,12,16,114
+sow-sleep-lactate,460,93,60,613
+sow-stand,77,11,10,98
+sow-stand-feed,79,9,8,96
