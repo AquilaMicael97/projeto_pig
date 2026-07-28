@@ -26,6 +26,37 @@ USO
     --epocas 5        numero de epocas (padrao 5; aumente se quiser)
     --imgsz 480       tamanho da imagem (padrao 480; menor = mais rapido)
     --modelo yolo11n.pt   modelo base (padrao yolo11n.pt)
+    --sem-augmentation    desliga toda augmentation (sanidade rapida, como antes)
+
+ESTRATEGIA DE DATA AUGMENTATION (online, via hiperparametros do Ultralytics)
+    Os valores abaixo refletem o que o painel de augmentation ja testado
+    (gerar_painel_augmentation.py) considerou viavel para a cena da baia:
+
+    --degrees   rotacao aleatoria (padrao 15). Cada granja monta a camera
+                num angulo diferente.
+    --fliplr    espelhamento horizontal (fixo em 0.5). Nao ha lado
+                preferencial na baia.
+    --hsv-v     variacao de brilho (padrao 0.4). Cobre o ciclo dia/noite.
+    --hsv-s     variacao de saturacao/contraste de cor (padrao 0.7).
+    --mosaic    mosaico de 4 imagens (padrao 1.0, ligado).
+    --mixup     mistura de duas imagens (padrao 0.1, conservador — modelo
+                nano costuma se beneficiar menos de mixup forte que
+                modelos maiores).
+
+    Fixos, sem flag (nao fazem sentido para esta cena):
+    flipud=0 (camera nunca vira de cabeca para baixo), shear=0 e
+    perspective=0 (camera fixa, sem mudanca de angulo de visao).
+
+    scale e limitado a 0.2 (em vez do padrao 0.5 do Ultralytics) porque o
+    painel testou uma distorcao de escala mais forte (fator 1.9) e
+    CONCLUIU que ela descaracteriza a razao de tamanho porca/leitao — o
+    sinal mais importante para diferenciar as duas classes. Um scale
+    mais comedido evita reproduzir esse problema durante o treino.
+
+    Desfoque (blur) e escala de cinza (modo infravermelho) nao tem
+    hiperparametro dedicado no Ultralytics: sao aplicados automaticamente
+    pelo pipeline de Albumentations quando o pacote esta instalado
+    (pip install albumentations). O script avisa se ele nao for encontrado.
 
 OBSERVACAO SOBRE O MODELO BASE
     Uso yolo11n.pt como padrao por ser o mais estavel e amplamente testado
@@ -50,7 +81,29 @@ def main():
                    help="modelo base (padrao yolo11n.pt)")
     p.add_argument("--saida", default="resultado_treino_teste",
                    help="pasta de saida")
+    p.add_argument("--degrees", type=float, default=15.0,
+                   help="rotacao maxima em graus (padrao 15)")
+    p.add_argument("--hsv-v", type=float, default=0.4, dest="hsv_v",
+                   help="variacao de brilho, 0-1 (padrao 0.4)")
+    p.add_argument("--hsv-s", type=float, default=0.7, dest="hsv_s",
+                   help="variacao de saturacao/contraste de cor, 0-1 (padrao 0.7)")
+    p.add_argument("--mosaic", type=float, default=1.0,
+                   help="probabilidade de mosaico, 0-1 (padrao 1.0)")
+    p.add_argument("--mixup", type=float, default=0.1,
+                   help="probabilidade de mixup, 0-1 (padrao 0.1)")
+    p.add_argument("--sem-augmentation", action="store_true", dest="sem_aug",
+                   help="desliga toda augmentation (sanidade rapida)")
     args = p.parse_args()
+
+    if args.sem_aug:
+        args.degrees = args.hsv_v = args.hsv_s = args.mosaic = args.mixup = 0.0
+
+    try:
+        import albumentations  # noqa: F401
+    except ImportError:
+        print("AVISO: pacote 'albumentations' nao encontrado — desfoque e escala")
+        print("de cinza automaticos do Ultralytics ficam desligados. Para ativar:")
+        print("  pip install albumentations\n")
 
     yaml_path = Path(args.data_yaml)
     if not yaml_path.is_file():
@@ -75,6 +128,12 @@ def main():
     print("epocas    : %d" % args.epocas)
     print("imgsz     : %d" % args.imgsz)
     print("dispositivo: CPU")
+    if args.sem_aug:
+        print("augmentation: DESLIGADA (--sem-augmentation)")
+    else:
+        print("augmentation: degrees=%.1f fliplr=0.5 hsv_v=%.2f hsv_s=%.2f "
+              "scale=0.2 mosaic=%.2f mixup=%.2f" %
+              (args.degrees, args.hsv_v, args.hsv_s, args.mosaic, args.mixup))
     print("=" * 60)
     print()
 
@@ -92,10 +151,17 @@ def main():
         project=args.saida,
         name="treino",
         exist_ok=True,
-        # augmentation leve — este e so um teste de sanidade
-        degrees=0.0,
+        # augmentation — ver docstring do modulo para a justificativa de cada valor
+        degrees=args.degrees,
         fliplr=0.5,
-        mosaic=0.0,
+        flipud=0.0,
+        hsv_v=args.hsv_v,
+        hsv_s=args.hsv_s,
+        scale=0.2,
+        shear=0.0,
+        perspective=0.0,
+        mosaic=args.mosaic,
+        mixup=args.mixup,
         verbose=True,
     )
 
