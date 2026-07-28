@@ -1,5 +1,6 @@
 # Imagens do dataset ficam no Roboflow / manifest.json, nao no git (pesado demais)
 sows_farm_02.v2i.yolo26/*/images/
+sows_farm_02.v2i.yolo26/_quarentena_vazamento/
 *.cache
 
 # Saidas de treino/inferencia (reprodutiveis a partir do codigo + dataset)
