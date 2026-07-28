@@ -1,0 +1,8 @@
+arquivo,veredito,motivos,caminho
+CAM1_RGB_2024-08-24_03-55-52_jpg.rf.6a04bb923d23b48a960646fb5f2eb284.jpg,duvidosa,nitidez_limitrofe,sows_farm_02.v2i.yolo26\test\images\CAM1_RGB_2024-08-24_03-55-52_jpg.rf.6a04bb923d23b48a960646fb5f2eb284.jpg
+CAM1_RGB_2024-08-24_05-58-00_jpg.rf.115b38fa72cf8599e1d37910a08f3495.jpg,duvidosa,nitidez_limitrofe,sows_farm_02.v2i.yolo26\train\images\CAM1_RGB_2024-08-24_05-58-00_jpg.rf.115b38fa72cf8599e1d37910a08f3495.jpg
+CAM2_RGB_2024-08-20_18-41-00_jpg.rf.897f4b1ddf3b7abdecd371d3d05ba7ca.jpg,duvidosa,nitidez_limitrofe,sows_farm_02.v2i.yolo26\train\images\CAM2_RGB_2024-08-20_18-41-00_jpg.rf.897f4b1ddf3b7abdecd371d3d05ba7ca.jpg
+CAM2_RGB_2024-08-20_19-38-00_jpg.rf.a5f25694cc3c4f702b372b6643f10cd1.jpg,duvidosa,nitidez_limitrofe,sows_farm_02.v2i.yolo26\train\images\CAM2_RGB_2024-08-20_19-38-00_jpg.rf.a5f25694cc3c4f702b372b6643f10cd1.jpg
+CAM2_RGB_2024-08-21_04-29-59_jpg.rf.0885e5ac67816af2f3436bfb5474e67e.jpg,duvidosa,nitidez_limitrofe,sows_farm_02.v2i.yolo26\train\images\CAM2_RGB_2024-08-21_04-29-59_jpg.rf.0885e5ac67816af2f3436bfb5474e67e.jpg
+CAM3_RGB_2024-08-31_23-01-00_jpg.rf.a4d398c720742b6a2342dbb4b7daf261.jpg,duvidosa,nitidez_limitrofe,sows_farm_02.v2i.yolo26\train\images\CAM3_RGB_2024-08-31_23-01-00_jpg.rf.a4d398c720742b6a2342dbb4b7daf261.jpg
+CAM2_RGB_2024-08-20_23-38-00_jpg.rf.04cbc71d6e99e0848d65874300148bb1.jpg,duvidosa,nitidez_limitrofe,sows_farm_02.v2i.yolo26\valid\images\CAM2_RGB_2024-08-20_23-38-00_jpg.rf.04cbc71d6e99e0848d65874300148bb1.jpg

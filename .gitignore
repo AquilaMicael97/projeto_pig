@@ -1,5 +1,7 @@
 # Duplicatas removidas por vazamento entre splits (ver log_correcao_vazamento.csv)
 sows_farm_02.v2i.yolo26/_quarentena_vazamento/
+# Imagens de baixa qualidade removidas (ver log_remocao_qualidade.csv)
+sows_farm_02.v2i.yolo26/_quarentena_qualidade/
 *.cache
 
 # Saidas de treino/inferencia (reprodutiveis a partir do codigo + dataset)
