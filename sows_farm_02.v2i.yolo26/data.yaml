@@ -1,0 +1,13 @@
+train: C:\projetopig\dataset\sows_farm\sows_farm_02.v2i.yolo26\train
+val: C:\projetopig\dataset\sows_farm\sows_farm_02.v2i.yolo26\valid
+test: C:\projetopig\dataset\sows_farm\sows_farm_02.v2i.yolo26\test
+
+nc: 6
+names: ['piglet', 'sow-sit', 'sow-sleep', 'sow-sleep-lactate', 'sow-stand', 'sow-stand-feed']
+
+roboflow:
+  workspace: btg-4kqp7
+  project: sows-farm-02
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/btg-4kqp7/sows-farm-02/dataset/2

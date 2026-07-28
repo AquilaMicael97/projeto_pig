@@ -1,0 +1,15 @@
+# Imagens do dataset ficam no Roboflow / manifest.json, nao no git (pesado demais)
+sows_farm_02.v2i.yolo26/*/images/
+*.cache
+
+# Saidas de treino/inferencia (reprodutiveis a partir do codigo + dataset)
+runs/
+resultado_treino_teste/
+dataset_v1.0/
+
+# Pesos de modelo (baixaveis, nao versionar)
+*.pt
+
+# Python
+__pycache__/
+*.pyc
