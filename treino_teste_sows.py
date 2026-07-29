@@ -93,6 +93,12 @@ def main():
                    help="probabilidade de mixup, 0-1 (padrao 0.1)")
     p.add_argument("--sem-augmentation", action="store_true", dest="sem_aug",
                    help="desliga toda augmentation (sanidade rapida)")
+    p.add_argument("--device", default="auto",
+                   help="'auto' (usa GPU se disponivel), 'cpu', ou indice da GPU (ex: '0')")
+    p.add_argument("--batch", type=int, default=None,
+                   help="tamanho do lote (padrao: 4 em CPU, 16 em GPU)")
+    p.add_argument("--workers", type=int, default=None,
+                   help="processos de carregamento de dados (padrao: 2 em CPU, 8 em GPU)")
     args = p.parse_args()
 
     if args.sem_aug:
@@ -104,6 +110,15 @@ def main():
         print("AVISO: pacote 'albumentations' nao encontrado — desfoque e escala")
         print("de cinza automaticos do Ultralytics ficam desligados. Para ativar:")
         print("  pip install albumentations\n")
+
+    if args.device == "auto":
+        import torch
+        args.device = "0" if torch.cuda.is_available() else "cpu"
+    usando_gpu = args.device != "cpu"
+    if args.batch is None:
+        args.batch = 16 if usando_gpu else 4
+    if args.workers is None:
+        args.workers = 8 if usando_gpu else 2
 
     yaml_path = Path(args.data_yaml)
     if not yaml_path.is_file():
@@ -127,7 +142,8 @@ def main():
     print("modelo    : %s" % args.modelo)
     print("epocas    : %d" % args.epocas)
     print("imgsz     : %d" % args.imgsz)
-    print("dispositivo: CPU")
+    print("dispositivo: %s" % ("GPU %s" % args.device if usando_gpu else "CPU"))
+    print("batch/workers: %d/%d" % (args.batch, args.workers))
     if args.sem_aug:
         print("augmentation: DESLIGADA (--sem-augmentation)")
     else:
@@ -140,14 +156,15 @@ def main():
     modelo = YOLO(args.modelo)
 
     # ----- TREINO -----
-    print(">> Iniciando treino de teste. Em CPU isso pode demorar.\n")
+    print(">> Iniciando treino. %s\n" %
+          ("Em CPU isso pode demorar." if not usando_gpu else "Usando GPU."))
     modelo.train(
         data=str(yaml_path),
         epochs=args.epocas,
         imgsz=args.imgsz,
-        device="cpu",
-        batch=4,
-        workers=2,
+        device=args.device,
+        batch=args.batch,
+        workers=args.workers,
         project=args.saida,
         name="treino",
         exist_ok=True,
@@ -193,7 +210,7 @@ def main():
 
     for img in imgs:
         res = modelo_treinado.predict(
-            source=str(img), imgsz=args.imgsz, device="cpu",
+            source=str(img), imgsz=args.imgsz, device=args.device,
             conf=0.05, save=True, project=str(saida_infer), name="pred", exist_ok=True,
             verbose=False)
         # resumo por imagem, com a confianca de cada deteccao
