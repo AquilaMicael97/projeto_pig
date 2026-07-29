@@ -1,6 +1,6 @@
-train: C:\projetopig\dataset\sows_farm\sows_farm_02.v2i.yolo26\train
-val: C:\projetopig\dataset\sows_farm\sows_farm_02.v2i.yolo26\valid
-test: C:\projetopig\dataset\sows_farm\sows_farm_02.v2i.yolo26\test
+train: train
+val: valid
+test: test
 
 nc: 6
 names: ['piglet', 'sow-sit', 'sow-sleep', 'sow-sleep-lactate', 'sow-stand', 'sow-stand-feed']
