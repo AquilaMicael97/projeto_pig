@@ -10,12 +10,6 @@ O QUE ESTE SCRIPT FAZ
     2. Roda o modelo resultante sobre algumas imagens de teste e salva os
        resultados com as caixas detectadas desenhadas.
 
-O QUE ESPERAR
-    Em CPU, mesmo poucas epocas levam algum tempo (minutos a dezenas de
-    minutos, conforme o PC). Se ao final o modelo detectar leitoes e porca
-    aproximadamente nos lugares certos, o dataset esta sao. Se nao detectar
-    nada, ha problema na anotacao ou na estrutura de pastas.
-
 INSTALACAO (rode uma vez, no terminal)
     pip install ultralytics
 
